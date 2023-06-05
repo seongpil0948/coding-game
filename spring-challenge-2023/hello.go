@@ -26,7 +26,7 @@ func placeLine(srcIdx, destIdx, strength int) string {
 	return fmt.Sprintf("LINE %d %d %d", srcIdx, destIdx, strength)
 }
 
-var biasEgg = 50.0
+var biasEgg = 80.0
 
 const biasCrystal = 100.0
 
@@ -191,9 +191,13 @@ func calcDist(cells []Cell, src Cell, dest Cell, initialDist int, searchedIndice
 	}
 	for _, idx := range src.neighbors {
 		neighbors := filter(cells, func(v Cell) bool {
-			return v.index == idx && len(filter(searchedIndices, func(v int) bool { return v == idx })) == 0
+			return v.index == idx && len(
+				filter(searchedIndices, func(v int) bool {
+					return v == idx
+				})) == 0
 		})
 		if len(neighbors) > 0 {
+			fmt.Fprintf(os.Stderr, "hihi:  %+v\n", len(neighbors))
 			searchedIndices = append(searchedIndices, idx)
 			return calcDist(cells, src, neighbors[0], initialDist+1, searchedIndices)
 		}
